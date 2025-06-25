@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+  <meta charset="UTF-8">
   <title>Bernadette IA</title>
   <style>
     body {
@@ -29,6 +30,7 @@
       font-size: 16px;
       resize: vertical;
       border-radius: 5px;
+      border: none;
     }
 
     button {
@@ -38,6 +40,7 @@
       border-radius: 5px;
       background-color: #333;
       color: white;
+      border: none;
       cursor: pointer;
     }
 
@@ -59,12 +62,18 @@
     p {
       margin-bottom: 10px;
     }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #444;
+      margin: 15px 0;
+    }
   </style>
 </head>
 <body>
   <h1>🐔 Bernadette IA</h1>
   <div class="avatar">
-    <img src="/static/dinde.gif" alt="Bernadette" width="200">
+    <img src="{{ url_for('static', filename='dinde.gif') }}" alt="Bernadette" width="200">
   </div>
   <div class="chat-box">
     <textarea id="message" placeholder="Parle à Bernadette..." onkeydown="handleKey(event)"></textarea><br>
@@ -96,9 +105,9 @@
 
         const bloc = document.createElement('div');
         bloc.innerHTML = `
-          <p><strong>👤 Toi :</strong><br>${msg.replace(/\\n/g, '<br>')}</p>
-          <p><strong>🤖 Bernadette :</strong><br>${data.response.replace(/\\n/g, '<br>')}</p>
-          <hr style="border: 0; border-top: 1px solid #444;">
+          <p><strong>👤 Toi :</strong><br>${msg.replace(/\n/g, '<br>')}</p>
+          <p><strong>🤖 Bernadette :</strong><br>${data.response.replace(/\n/g, '<br>')}</p>
+          <hr>
         `;
         responseDiv.appendChild(bloc);
         responseDiv.scrollTop = responseDiv.scrollHeight;
