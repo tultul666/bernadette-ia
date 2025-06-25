@@ -11,14 +11,17 @@
       margin: 0;
       padding: 0;
     }
+
     .avatar {
       margin-top: 20px;
     }
+
     .chat-box {
       width: 80%;
       margin: auto;
       margin-top: 30px;
     }
+
     textarea {
       width: 80%;
       height: 80px;
@@ -27,6 +30,7 @@
       resize: vertical;
       border-radius: 5px;
     }
+
     button {
       padding: 10px 20px;
       font-size: 16px;
@@ -36,6 +40,7 @@
       color: white;
       cursor: pointer;
     }
+
     #response {
       margin-top: 30px;
       text-align: left;
@@ -50,6 +55,7 @@
       max-height: 400px;
       overflow-y: auto;
     }
+
     p {
       margin-bottom: 10px;
     }
@@ -87,14 +93,16 @@
       .then(res => res.json())
       .then(data => {
         const responseDiv = document.getElementById('response');
+
         const bloc = document.createElement('div');
         bloc.innerHTML = `
-          <p><strong>👤 Toi :</strong><br>${msg.replace(/\n/g, '<br>')}</p>
-          <p><strong>🤖 Bernadette :</strong><br>${data.response.replace(/\n/g, '<br>')}</p>
+          <p><strong>👤 Toi :</strong><br>${msg.replace(/\\n/g, '<br>')}</p>
+          <p><strong>🤖 Bernadette :</strong><br>${data.response.replace(/\\n/g, '<br>')}</p>
           <hr style="border: 0; border-top: 1px solid #444;">
         `;
         responseDiv.appendChild(bloc);
         responseDiv.scrollTop = responseDiv.scrollHeight;
+
         textarea.value = '';
       });
     }
