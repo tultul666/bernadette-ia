@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bernadette IA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .avatar {
+      margin-top: 20px;
+    }
+    .chat-box {
+      width: 80%;
+      margin: auto;
+      margin-top: 30px;
+    }
+    textarea {
+      width: 80%;
+      height: 80px;
+      padding: 10px;
+      font-size: 16px;
+      resize: vertical;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      border-radius: 5px;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+    }
+    #response {
+      margin-top: 30px;
+      text-align: left;
+      background: #222;
+      padding: 15px;
+      border-radius: 10px;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 15px;
+      line-height: 1.4;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    p {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐔 Bernadette IA</h1>
+  <div class="avatar">
+    <img src="/static/dinde.gif" alt="Bernadette" width="200">
+  </div>
+  <div class="chat-box">
+    <textarea id="message" placeholder="Parle à Bernadette..." onkeydown="handleKey(event)"></textarea><br>
+    <button onclick="sendMessage()">Envoyer</button>
+    <div id="response"></div>
+  </div>
+
+  <script>
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function sendMessage() {
+      const textarea = document.getElementById('message');
+      const msg = textarea.value.trim();
+      if (!msg) return;
+
+      fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const responseDiv = document.getElementById('response');
+        const bloc = document.createElement('div');
+        bloc.innerHTML = `
+          <p><strong>👤 Toi :</strong><br>${msg.replace(/\n/g, '<br>')}</p>
+          <p><strong>🤖 Bernadette :</strong><br>${data.response.replace(/\n/g, '<br>')}</p>
+          <hr style="border: 0; border-top: 1px solid #444;">
+        `;
+        responseDiv.appendChild(bloc);
+        responseDiv.scrollTop = responseDiv.scrollHeight;
+        textarea.value = '';
+      });
+    }
+  </script>
+</body>
+</html>
