@@ -13,8 +13,7 @@ app.secret_key = 'bernadette_secret_key'  # Pour stocker l'historique en session
 
 @app.route('/')
 def index():
-    session['history'] = [
-    ]  # Réinitialise l'historique à chaque chargement de page
+    session['history'] = []  # Réinitialise l'historique à chaque chargement de page
     return render_template('index.html')
 
 
@@ -22,24 +21,21 @@ def index():
 def chat():
     user_message = request.json.get('message')
 
-    # Initialise l'historique s'il n'existe pas
     if 'history' not in session:
         session['history'] = []
 
-    # Ajoute le message de l'utilisateur à l'historique
     session['history'].append({"role": "user", "content": user_message})
 
     try:
-        # Appel à OpenAI avec l'historique complet
-        response = openai.ChatCompletion.create(
+        # ✅ Compatible avec openai>=1.0.0
+        response = openai.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{
-                "role":
-                "system",
-                "content":
-                "Tu es Bernadette, une dinde super intelligente, sarcastique et drôle."
-            }] + session['history'])
-        ai_reply = response['choices'][0]['message']['content']
+                "role": "system",
+                "content": "Tu es Bernadette, une dinde super intelligente, sarcastique et drôle."
+            }] + session['history']
+        )
+        ai_reply = response.choices[0].message.content.strip()
         session['history'].append({"role": "assistant", "content": ai_reply})
     except Exception as e:
         ai_reply = f"Erreur : {e}"
@@ -48,5 +44,5 @@ def chat():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 3000))  # Compatible avec Replit
+    port = int(os.environ.get("PORT", 3000))
     app.run(host='0.0.0.0', port=port)
